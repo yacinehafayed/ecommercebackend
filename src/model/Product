@@ -1,0 +1,28 @@
+<?php
+namespace src\model;
+use src\config\DB;
+class Product {
+    private $db_conn;
+    public function __construct($conn){
+        $this-> db_conn = $conn;
+    }
+    public function getAllProducts(){
+        $sql = 'select * from products';
+        $stmt = $this-> db_conn->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll();
+    }
+    public function createProduct($data){
+        $sql = 'insert into products (name,description,price,category)
+        values (:name,:description,:price,:category)';
+        $stmt = $this-> db_conn->prepare($sql);
+        $stmt->bindParam(':name',$data['name']);
+        $stmt->bindParam(':description',$data['description']);
+        $stmt->bindParam(':price',$data['price']);
+        $stmt->bindParam(':category',$data['category']);
+        return $stmt->execute();
+        }
+}
+
+
+?>
